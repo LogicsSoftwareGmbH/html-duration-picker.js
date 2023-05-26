@@ -17,7 +17,17 @@ input {
   border: none;
   cursor: default;
   position: absolute;
+  height: 10.5px !important;
 }
+
+.html-duration-picker-input-controls-wrapper .scroll-btn.scrollUpBtn {
+	top: 1px;
+}
+
+.html-duration-picker-input-controls-wrapper .scroll-btn.scrollDownBtn {
+	top: 10.5px;
+}
+
 
 .html-duration-picker-input-controls-wrapper .caret {
   width: 0;
@@ -40,6 +50,16 @@ input {
   position: absolute;
   top: 1px;
   padding: 2px 0;
+  right: 37px;
+  height: 23px;
+}
+
+.clearButton {
+	position:absolute;
+	right:12px;
+	border:none;
+	top:50%;
+	transform:translateY(-50%);
 }
 
 .html-duration-picker-input-controls-wrapper {

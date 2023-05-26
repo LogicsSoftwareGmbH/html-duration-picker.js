@@ -692,8 +692,6 @@
       // Set the default text and apply some basic styling to the duration picker
       if (!(inputBox.getAttribute('data-upgraded') == 'true')) {
         const currentInputBoxStyle = inputBox.currentStyle || window.getComputedStyle(inputBox);
-        const inputBoxRightMargin = currentInputBoxStyle.marginRight;
-        const inputBoxLeftMargin = currentInputBoxStyle.marginLeft;
         const inputBoxRightBorder = parseFloat(currentInputBoxStyle.borderRight);
         const inputBoxLeftBorder = parseFloat(currentInputBoxStyle.borderLeft);
         const inputBoxRightPadding = parseFloat(currentInputBoxStyle.paddingRight);
@@ -725,7 +723,6 @@
         }
 
         inputBox.setAttribute('aria-label', 'Duration Picker');
-		inputBox.setAttribute('style', 'color:#2A95D2;');
         inputBox.addEventListener('keydown', handleKeydown);
         // selects a block of hours, minutes etc (useful when focused by keyboard: Tab)
         inputBox.addEventListener('focus', handleInputFocus);
@@ -743,8 +740,8 @@
         const scrollButtons = [scrollUpBtn, scrollDownBtn];
 
         // set css classes
-        scrollUpBtn.setAttribute('class', 'scroll-btn');
-        scrollDownBtn.setAttribute('class', 'scroll-btn');
+        scrollUpBtn.setAttribute('class', 'scroll-btn scrollUpBtn');
+        scrollDownBtn.setAttribute('class', 'scroll-btn scrollDownBtn');
 
         // set button to 'button' to prevent 'submit' action in forms
         scrollUpBtn.setAttribute('type', 'button');
@@ -753,18 +750,6 @@
         // set aria-labels for accessibility
         scrollUpBtn.setAttribute('aria-label', 'Increase duration');
         scrollDownBtn.setAttribute('aria-label', 'Decrease duration');
-
-        // set inline-styles for positioning
-        scrollUpBtn.setAttribute(
-          'style',
-          `height:${inputBox.offsetHeight / 2 - 1}px !important; top: 1px;`,
-        );
-        scrollDownBtn.setAttribute(
-          'style',
-          `height:${inputBox.offsetHeight / 2 - 1}px !important; top: ${
-            inputBox.offsetHeight / 2 - 1
-          }px;`,
-        );
 
         // Create the carets in the buttons. These can be replaced by images, font icons, or text.
         const caretUp = document.createElement('div');
@@ -822,13 +807,11 @@
             }
           });
           btn.addEventListener('mouseup', (event) => {
-            event.target.style.transform = 'translateY(0)';
             const adjustmentFactor = getAdjustmentFactor(inputBox);
             highlightTimeUnitArea(inputBox, adjustmentFactor);
             clearInterval(intervalId);
           });
           btn.addEventListener('mouseleave', (event) => {
-            event.target.style.transform = 'translateY(0)';
             if (intervalId) {
               clearInterval(intervalId);
               const adjustmentFactor = getAdjustmentFactor(inputBox);
@@ -842,13 +825,6 @@
         // set css classes
         controlsDiv.setAttribute('class', 'controls');
 
-        // set inline styles
-        controlsDiv.setAttribute(
-          'style',
-          `right: 37px;
-        height:${inputBox.offsetHeight}px;`,
-        );
-
         // Add buttons to controls div
         controlsDiv.appendChild(scrollUpBtn);
         controlsDiv.appendChild(scrollDownBtn);
@@ -856,12 +832,10 @@
         // this div wraps around existing input, then appends control div
         const controlWrapper = document.createElement('div');
 
-        // set css classes
-        controlWrapper.setAttribute('class', 'html-duration-picker-input-controls-wrapper');
         // set inline styles
         controlWrapper.setAttribute(
           'style',
-          `width: ${totalInputBoxWidth}px; margin-left: ${inputBoxLeftMargin}; margin-right: ${inputBoxRightMargin};`,
+          `width: ${totalInputBoxWidth}px;`,
         );
         // add the div just before the picker
         inputBox.parentNode.insertBefore(controlWrapper, inputBox);
@@ -872,7 +846,7 @@
 
 		const clearButton = document.createElement('button');
 		clearButton.innerText = 'X';
-		clearButton.setAttribute('style', 'position:absolute; right:12px; border:none; top:50%; transform:translateY(-50%);');
+		clearButton.setAttribute('class', 'clearButton');
 		clearButton.addEventListener('click', () => handleClearInput(inputBox));
 		controlWrapper.appendChild(clearButton);
       }
