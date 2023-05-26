@@ -691,23 +691,6 @@
     getInputFields.forEach((inputBox, ix) => {
       // Set the default text and apply some basic styling to the duration picker
       if (!(inputBox.getAttribute('data-upgraded') == 'true')) {
-        const currentInputBoxStyle = inputBox.currentStyle || window.getComputedStyle(inputBox);
-        const inputBoxRightBorder = parseFloat(currentInputBoxStyle.borderRight);
-        const inputBoxLeftBorder = parseFloat(currentInputBoxStyle.borderLeft);
-        const inputBoxRightPadding = parseFloat(currentInputBoxStyle.paddingRight);
-        const inputBoxLeftPadding = parseFloat(currentInputBoxStyle.paddingLeft);
-        let totalInputBoxWidth;
-        const currentInputBoxWidth = parseFloat(currentInputBoxStyle.width);
-        if (currentInputBoxStyle.boxSizing === 'content-box') {
-          totalInputBoxWidth =
-            currentInputBoxWidth +
-            inputBoxRightBorder +
-            inputBoxLeftBorder +
-            inputBoxRightPadding +
-            inputBoxLeftPadding;
-        } else {
-          totalInputBoxWidth = currentInputBoxWidth;
-        }
         inputBox.setAttribute('data-upgraded', true);
         inputBox.setAttribute('data-adjustment-factor', 3600);
         const hideSeconds = shouldHideSeconds(inputBox);
@@ -831,12 +814,8 @@
 
         // this div wraps around existing input, then appends control div
         const controlWrapper = document.createElement('div');
-
-        // set inline styles
-        controlWrapper.setAttribute(
-          'style',
-          `width: ${totalInputBoxWidth}px;`,
-        );
+		// set css classes
+		controlWrapper.setAttribute('class', 'html-duration-picker-input-controls-wrapper');
         // add the div just before the picker
         inputBox.parentNode.insertBefore(controlWrapper, inputBox);
         // move the picker into the wrapper div
