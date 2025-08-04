@@ -22,14 +22,24 @@ module.exports = (env, args) => {
         }
       : {};
 
+  // Check if we want an unminified production build
+  const isUnminified = env && env.unminified;
+  const withSourceMap = env && env.sourcemap;
+
   return {
     context: __dirname,
     entry: './src/html-duration-picker.js',
+    devtool: withSourceMap ? 'source-map' : false,
     optimization: {
-      minimize: true,
+      minimize: args.mode === 'production' && !isUnminified,
       minimizer: [
         new TerserPlugin({
           extractComments: false,
+          terserOptions: {
+            format: {
+              comments: 'all', // Keep all comments when using source maps
+            },
+          },
         }),
       ],
     },
@@ -39,7 +49,11 @@ module.exports = (env, args) => {
           ? path.resolve(__dirname, 'src/compiled')
           : path.resolve(__dirname, 'dist'),
       filename:
-        args.mode == 'development' ? 'html-duration-picker.js' : 'html-duration-picker.min.js',
+        args.mode == 'development' 
+          ? 'html-duration-picker.js' 
+          : isUnminified 
+            ? 'html-duration-picker.js'
+            : 'html-duration-picker.min.js',
       library: 'HtmlDurationPicker',
       libraryTarget: 'umd',
       libraryExport: 'default',
@@ -64,6 +78,7 @@ module.exports = (env, args) => {
             options: {
               plugins: ['babel-plugin-remove-template-literals-whitespace'],
               presets: [['@babel/preset-env', browserTarget]],
+              comments: !!(isUnminified || withSourceMap), // Keep comments for unminified builds
             },
           },
         },
